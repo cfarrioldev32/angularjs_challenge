@@ -1,0 +1,14 @@
+<ng-include src="'../pages/partials/navbar.html'"></ng-include>
+
+<main class="flex-fill">
+    <div class="container inicio py-4">
+        <h2 class="text-center">{{inicioCtrl.titulo}}</h2>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div ng-bind-html="inicioCtrl.contenido"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<ng-include src="'../pages/partials/footer.html'"></ng-include>

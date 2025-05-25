@@ -1,0 +1,31 @@
+<ng-include src="'../pages/partials/navbar.html'"></ng-include>
+
+<div class="container inicio" ng-if="turnoCtrl.estadoFormulario === 'formulario'">
+  <h2 class="text-center mb-4">Solicitar turno</h2>
+  <div class="form-horizontal">
+    <selector-especialidad especialidades="turnoCtrl.especialidades"
+      on-seleccion="turnoCtrl.cargarProfesionalesYHorarios()" modelo="turnoCtrl.turno.especialidad">
+    </selector-especialidad>
+
+    <div ng-if="turnoCtrl.turno.especialidad">
+      <selector-profesional profesionales="turnoCtrl.profesionales" cargando="turnoCtrl.cargandoProfesionales"
+        modelo="turnoCtrl.turno.profesional">
+      </selector-profesional>
+
+      <div class="alert alert-info" ng-if="!turnoCtrl.cargandoProfesionales && turnoCtrl.profesionales.length === 0">
+        No hay profesionales disponibles para esta especialidad
+      </div>
+    </div>
+
+    <formulario-paciente ng-if="turnoCtrl.turno.profesional" paciente="turnoCtrl.turno"
+      on-enviar="turnoCtrl.enviarFormulario()">
+    </formulario-paciente>
+  </div>
+</div>
+<div class="container inicio text-center mt-5" ng-if="turnoCtrl.estadoFormulario === 'resultado'">
+  <h3>Turno solicitado exitosamente</h3>
+  <p class="lead">{{ turnoCtrl.resultado.mensaje }}</p>
+
+  <a ui-sref="inicio" class="btn btn-primary">Volver al inicio</a>
+</div>
+<ng-include src="'../pages/partials/footer.html'"></ng-include>

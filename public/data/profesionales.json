@@ -1,0 +1,53 @@
+{
+  "Dermatología": [
+    {
+      "id": 101,
+      "nombre": "Dra. María José Alonso",
+      "horario": "12:00"
+    },
+    {
+      "id": 102,
+      "nombre": "Dr. Jorge Ocampo",
+      "horario": "13:00"
+    },
+    {
+      "id": 103,
+      "nombre": "Dra. Ana Giménez Arnau",
+      "horario": "16:00"
+    }
+  ],
+  "Cardiología": [
+    {
+      "id": 201,
+      "nombre": "Dr. Valentín Fuster",
+      "horario": "09:00"
+    },
+    {
+      "id": 202,
+      "nombre": "Dra. Magda Heras",
+      "horario": "11:00"
+    },
+    {
+      "id": 203,
+      "nombre": "Dr. José Luis Zamorano",
+      "horario": "15:00"
+    }
+  ],
+  "Neurología": [
+    {
+      "id": 301,
+      "nombre": "Dr. José Obeso",
+      "horario": "10:00"
+    },
+    {
+      "id": 302,
+      "nombre": "Dra. Mercè Boada",
+      "horario": "14:00"
+    },
+    {
+      "id": 303,
+      "nombre": "Dr. Pablo Martínez-Lage",
+      "horario": "17:00"
+    }
+  ]
+}

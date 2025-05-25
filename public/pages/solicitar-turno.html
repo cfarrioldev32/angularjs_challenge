@@ -1,0 +1,200 @@
+<div class="turno-container" ng-class="{'loading': turnoCtrl.cargando}">
+  <!-- Paso 1: Selección de especialidad -->
+  <div class="step" ng-if="turnoCtrl.step === 1">
+    <h2 class="text-center">Seleccione una especialidad</h2>
+    
+    <div class="form-group">
+      <label>Especialidad Médica:</label>
+      <select class="form-control" ng-model="turnoCtrl.turno.especialidad" 
+              ng-options="especialidad as especialidad.nombre for especialidad in turnoCtrl.especialidades"
+              ng-disabled="turnoCtrl.cargando">
+        <option value="">-- Seleccione --</option>
+      </select>
+    </div>
+    
+    <div class="text-right">
+      <button class="btn btn-primary" ng-click="turnoCtrl.cargarProfesionales()" 
+              ng-disabled="!turnoCtrl.turno.especialidad || turnoCtrl.cargando">
+        Siguiente <i class="fa fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Paso 2: Selección de profesional -->
+  <div class="step" ng-if="turnoCtrl.step === 2">
+    <h2 class="text-center">Seleccione un profesional</h2>
+    <p class="text-muted">Especialidad: {{turnoCtrl.turno.especialidad.nombre}}</p>
+    
+    <div class="list-group">
+      <a href="#" class="list-group-item" 
+         ng-repeat="profesional in turnoCtrl.profesionales"
+         ng-click="turnoCtrl.cargarHorarios(profesional)"
+         ng-class="{'active': turnoCtrl.turno.profesional === profesional}">
+        <h4 class="list-group-item-heading">
+          {{profesional.titulo}} {{profesional.nombre}} {{profesional.apellido}}
+        </h4>
+        <p class="list-group-item-text">{{profesional.especialidad}}</p>
+      </a>
+    </div>
+    
+    <div class="clearfix">
+      <button class="btn btn-default pull-left" ng-click="turnoCtrl.volverPasoAnterior()">
+        <i class="fa fa-arrow-left"></i> Volver
+      </button>
+    </div>
+  </div>
+  
+  <!-- Paso 3: Selección de horario -->
+  <div class="step" ng-if="turnoCtrl.step === 3">
+    <h2 class="text-center">Seleccione un horario</h2>
+    <p class="text-muted">
+      Profesional: {{turnoCtrl.turno.profesional.titulo}} 
+      {{turnoCtrl.turno.profesional.nombre}} {{turnoCtrl.turno.profesional.apellido}}
+    </p>
+    
+    <div class="horarios-container">
+      <div class="horario-card" ng-repeat="horario in turnoCtrl.horariosDisponibles"
+           ng-click="turnoCtrl.seleccionarHorario(horario)"
+           ng-class="{'selected': turnoCtrl.turno.horario === horario}">
+        <div class="dia">{{horario.fecha | date:'EEE'}}</div>
+        <div class="fecha">{{horario.fecha | date:'dd/MM'}}</div>
+        <div class="hora">{{horario.hora}}</div>
+      </div>
+    </div>
+    
+    <div class="clearfix">
+      <button class="btn btn-default pull-left" ng-click="turnoCtrl.volverPasoAnterior()">
+        <i class="fa fa-arrow-left"></i> Volver
+      </button>
+    </div>
+  </div>
+  
+  <!-- Paso 4: Datos personales -->
+  <div class="step" ng-if="turnoCtrl.step === 4">
+    <h2 class="text-center">Complete sus datos</h2>
+    
+    <form name="turnoForm" novalidate>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Nombre *</label>
+            <input type="text" class="form-control" ng-model="turnoCtrl.turno.paciente.nombre" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Apellido *</label>
+            <input type="text" class="form-control" ng-model="turnoCtrl.turno.paciente.apellido" required>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Teléfono *</label>
+        <input type="tel" class="form-control" ng-model="turnoCtrl.turno.paciente.telefono" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="form-control" ng-model="turnoCtrl.turno.paciente.email">
+      </div>
+      
+      <div class="form-group">
+        <label>Comentarios (opcional)</label>
+        <textarea class="form-control" ng-model="turnoCtrl.turno.comentarios" rows="3"></textarea>
+      </div>
+      
+      <div class="resumen-turno">
+        <h4>Resumen de su turno:</h4>
+        <p><strong>Especialidad:</strong> {{turnoCtrl.turno.especialidad.nombre}}</p>
+        <p><strong>Profesional:</strong> {{turnoCtrl.turno.profesional.nombre}} {{turnoCtrl.turno.profesional.apellido}}</p>
+        <p><strong>Fecha y hora:</strong> {{turnoCtrl.formatoFecha(turnoCtrl.turno.horario.fechaHora)}}</p>
+      </div>
+      
+      <div class="text-right">
+        <button class="btn btn-default" ng-click="turnoCtrl.volverPasoAnterior()">
+          <i class="fa fa-arrow-left"></i> Volver
+        </button>
+        <button class="btn btn-primary" ng-click="turnoCtrl.enviarSolicitud()" 
+                ng-disabled="turnoCtrl.cargando">
+          Confirmar Turno <i class="fa fa-check"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Mensaje de error -->
+  <div class="alert alert-danger" ng-if="turnoCtrl.error">
+    <button type="button" class="close" ng-click="turnoCtrl.error = null">&times;</button>
+    {{turnoCtrl.error}}
+  </div>
+  
+  <!-- Loading overlay -->
+  <div class="loading-overlay" ng-if="turnoCtrl.cargando">
+    <i class="fa fa-spinner fa-spin"></i> Procesando...
+  </div>
+</div>
+
+<style>
+  .turno-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+  }
+  
+  .step {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .horarios-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  
+  .horario-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 80px;
+  }
+  
+  .horario-card:hover, .horario-card.selected {
+    background: #f5f5f5;
+    border-color: #337ab7;
+  }
+  
+  .horario-card .dia {
+    font-weight: bold;
+    color: #337ab7;
+  }
+  
+  .resumen-turno {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 20px 0;
+  }
+  
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-size: 1.5em;
+  }
+</style>
