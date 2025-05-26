@@ -28,7 +28,6 @@ const writeJson = (filePath, newItem) =>
         if (readErr.code !== 'ENOENT') {
           return reject(readErr);
         }
-        // Si el archivo no existe, usamos el objeto por defecto
       } else {
         try {
           jsonContent = JSON.parse(data);
@@ -41,7 +40,6 @@ const writeJson = (filePath, newItem) =>
         }
       }
 
-      // Agregamos el nuevo turno
       jsonContent.turnos.push(newItem);
 
       fs.writeFile(filePath, JSON.stringify(jsonContent, null, 2), 'utf8', (writeErr) => {
